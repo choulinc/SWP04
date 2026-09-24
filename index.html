@@ -103,6 +103,19 @@
                 >
               </div>
             </fieldset>
+            <div class="custom-color-row">
+              <label
+                ><input
+                  id="new-use-custom"
+                  type="checkbox"
+                />使用自訂顏色</label
+              ><input
+                id="new-custom-color"
+                type="color"
+                value="#d8e8ff"
+                aria-label="選擇自訂顏色"
+              />
+            </div>
             <p id="form-error" class="form-error" role="alert" hidden></p>
             <button class="create-button" type="submit">
               <span class="plus" aria-hidden="true">＋</span>貼上看板
@@ -217,9 +230,68 @@
                 aria-label="蜜桃橘便利貼"
                 aria-pressed="false"
               >
-                <span class="swatch-peach"></span>
+                <span class="swatch-peach"></span></button
+              ><button
+                type="button"
+                class="color-filter custom-filter"
+                data-color="custom"
+                aria-pressed="false"
+              >
+                自訂
               </button>
             </div>
+          </div>
+          <div class="board-action-row">
+            <select id="state-filter" aria-label="便利貼狀態">
+              <option value="active">目前貼板</option>
+              <option value="favorite">收藏</option>
+              <option value="overdue">已逾期</option>
+              <option value="archived">封存區</option>
+            </select>
+            <select id="sort-select" aria-label="排列方式">
+              <option value="manual">手動排列</option>
+              <option value="newest">最新建立</option>
+              <option value="oldest">最早建立</option>
+              <option value="updated">最近修改</option>
+              <option value="due">到期日</option>
+              <option value="priority">優先級</option>
+            </select>
+            <button id="view-toggle" type="button" aria-pressed="false">
+              清單視圖
+            </button>
+            <button id="theme-toggle" type="button" aria-label="切換深色模式">
+              深色模式
+            </button>
+          </div>
+          <div class="board-action-row secondary-actions">
+            <button id="select-mode" type="button" aria-pressed="false">
+              多選
+            </button>
+            <button id="export-button" type="button">匯出備份</button>
+            <button id="import-button" type="button">匯入備份</button>
+            <input
+              id="import-file"
+              type="file"
+              accept=".json,application/json"
+              hidden
+            />
+            <button id="print-button" type="button">列印看板</button>
+          </div>
+          <div id="batch-bar" class="batch-bar" hidden>
+            <span id="selected-count">已選 0 張</span
+            ><button id="select-all" type="button">全選目前結果</button
+            ><select id="batch-color" aria-label="批次換色">
+              <option value="">選擇新顏色</option>
+              <option value="yellow">暖黃</option>
+              <option value="pink">粉紅</option>
+              <option value="blue">天空藍</option>
+              <option value="green">薄荷綠</option>
+              <option value="lavender">薰衣草紫</option>
+              <option value="peach">蜜桃橘</option></select
+            ><button id="batch-recolor" type="button">批次換色</button
+            ><button id="batch-delete" type="button" class="danger-action">
+              批次刪除
+            </button>
           </div>
           <p class="board-tip" id="board-tip">
             拖曳便利貼調整順序，也可以用每張貼紙上的箭頭移動。
@@ -312,6 +384,49 @@
             >
           </div>
         </fieldset>
+        <div class="custom-color-row edit-custom-row">
+          <label
+            ><input id="edit-use-custom" type="checkbox" />使用自訂顏色</label
+          ><input
+            id="edit-custom-color"
+            type="color"
+            value="#d8e8ff"
+            aria-label="編輯自訂顏色"
+          />
+        </div>
+        <div class="detail-grid">
+          <label>到期日<input id="edit-due-date" type="date" /></label
+          ><label
+            >優先級<select id="edit-priority">
+              <option value="none">未設定</option>
+              <option value="high">高</option>
+              <option value="medium">中</option>
+              <option value="low">低</option>
+            </select></label
+          >
+        </div>
+        <label for="edit-tags">標籤（以逗號分隔）</label
+        ><input
+          id="edit-tags"
+          type="text"
+          maxlength="240"
+          placeholder="例如：工作,靈感"
+        />
+        <div class="checklist-editor">
+          <div class="checklist-heading">
+            <strong>核取清單</strong><span id="checklist-progress">0 / 0</span>
+          </div>
+          <ul id="checklist-items"></ul>
+          <div class="checklist-add">
+            <input
+              id="checklist-input"
+              type="text"
+              maxlength="100"
+              placeholder="新增一個步驟"
+              aria-label="新增核取項目"
+            /><button id="add-checklist-item" type="button">加入</button>
+          </div>
+        </div>
         <p id="edit-error" class="form-error" role="alert" hidden></p>
         <div class="dialog-actions">
           <button id="cancel-dialog" type="button" class="cancel-button">
