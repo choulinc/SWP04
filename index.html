@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#eaf0f6" />
+    <meta
+      name="description"
+      content="貼一下便利貼看板，把想法、提醒與靈感好好留住。"
+    />
+    <title>貼一下 · 便利貼看板</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="貼一下首頁"
+          ><span class="brand-mark" aria-hidden="true"><span></span></span
+          ><span>貼一下<span class="brand-period">.</span></span></a
+        >
+        <p>把想法留在看得見的地方</p>
+        <span class="header-date" id="today-date"></span>
+      </header>
+
+      <main class="workspace">
+        <aside class="composer-panel" aria-labelledby="composer-title">
+          <div class="composer-intro">
+            <span class="small-label">隨手記下</span>
+            <h1 id="composer-title">
+              每個好點子，<br />都值得<span>貼下來。</span>
+            </h1>
+            <p>靈感、提醒，或是剛想到的小事。寫成便利貼，下次回來還在這裡。</p>
+          </div>
+          <form id="note-form" class="note-form" autocomplete="off">
+            <label for="note-title">標題 <span>選填</span></label>
+            <input
+              id="note-title"
+              type="text"
+              maxlength="80"
+              placeholder="例如：週末要做的事"
+            />
+            <label for="note-content">內容</label>
+            <textarea
+              id="note-content"
+              rows="6"
+              maxlength="2000"
+              placeholder="寫下腦中的想法..."
+              required
+            ></textarea>
+            <fieldset class="color-fieldset">
+              <legend>選一個顏色</legend>
+              <div
+                id="new-color-picker"
+                class="color-picker"
+                role="radiogroup"
+                aria-label="便利貼顏色"
+              >
+                <label class="color-choice"
+                  ><input
+                    type="radio"
+                    name="new-color"
+                    value="yellow"
+                    checked
+                  /><span class="swatch swatch-yellow" title="暖黃"></span
+                  ><span class="sr-only">暖黃</span></label
+                >
+                <label class="color-choice"
+                  ><input type="radio" name="new-color" value="pink" /><span
+                    class="swatch swatch-pink"
+                    title="粉紅"
+                  ></span
+                  ><span class="sr-only">粉紅</span></label
+                >
+                <label class="color-choice"
+                  ><input type="radio" name="new-color" value="blue" /><span
+                    class="swatch swatch-blue"
+                    title="天空藍"
+                  ></span
+                  ><span class="sr-only">天空藍</span></label
+                >
+                <label class="color-choice"
+                  ><input type="radio" name="new-color" value="green" /><span
+                    class="swatch swatch-green"
+                    title="薄荷綠"
+                  ></span
+                  ><span class="sr-only">薄荷綠</span></label
+                >
+                <label class="color-choice"
+                  ><input type="radio" name="new-color" value="lavender" /><span
+                    class="swatch swatch-lavender"
+                    title="薰衣草紫"
+                  ></span
+                  ><span class="sr-only">薰衣草紫</span></label
+                >
+                <label class="color-choice"
+                  ><input type="radio" name="new-color" value="peach" /><span
+                    class="swatch swatch-peach"
+                    title="蜜桃橘"
+                  ></span
+                  ><span class="sr-only">蜜桃橘</span></label
+                >
+              </div>
+            </fieldset>
+            <p id="form-error" class="form-error" role="alert" hidden></p>
+            <button class="create-button" type="submit">
+              <span class="plus" aria-hidden="true">＋</span>貼上看板
+              <span aria-hidden="true">↗</span>
+            </button>
+          </form>
+          <div class="storage-caption">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M12 3 4.5 6v5.7c0 4.7 3 7.8 7.5 9.3 4.5-1.5 7.5-4.6 7.5-9.3V6L12 3Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+              <path
+                d="m9 12 2 2 4-4"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg
+            ><span>自動儲存在此瀏覽器</span>
+          </div>
+        </aside>
+
+        <section class="board-panel" aria-labelledby="board-title">
+          <div class="board-heading">
+            <div>
+              <span class="small-label">想法集合地</span>
+              <h2 id="board-title">
+                我的貼板 <span id="note-count" class="count-pill">0</span>
+              </h2>
+            </div>
+            <p id="board-subtitle">所有靈感，都有自己的位置。</p>
+          </div>
+          <div class="board-tools">
+            <label class="search-box"
+              ><svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle
+                  cx="10.8"
+                  cy="10.8"
+                  r="6.2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <path
+                  d="m16 16 4.2 4.2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                /></svg
+              ><span class="sr-only">搜尋便利貼</span
+              ><input id="search-input" type="search" placeholder="搜尋便利貼"
+            /></label>
+            <div
+              id="color-filters"
+              class="color-filters"
+              role="group"
+              aria-label="依顏色篩選"
+            >
+              <button
+                type="button"
+                class="color-filter is-active"
+                data-color="all"
+                aria-pressed="true"
+              >
+                全部</button
+              ><button
+                type="button"
+                class="color-filter dot-filter"
+                data-color="yellow"
+                aria-label="暖黃便利貼"
+                aria-pressed="false"
+              >
+                <span class="swatch-yellow"></span></button
+              ><button
+                type="button"
+                class="color-filter dot-filter"
+                data-color="pink"
+                aria-label="粉紅便利貼"
+                aria-pressed="false"
+              >
+                <span class="swatch-pink"></span></button
+              ><button
+                type="button"
+                class="color-filter dot-filter"
+                data-color="blue"
+                aria-label="天空藍便利貼"
+                aria-pressed="false"
+              >
+                <span class="swatch-blue"></span></button
+              ><button
+                type="button"
+                class="color-filter dot-filter"
+                data-color="green"
+                aria-label="薄荷綠便利貼"
+                aria-pressed="false"
+              >
+                <span class="swatch-green"></span></button
+              ><button
+                type="button"
+                class="color-filter dot-filter"
+                data-color="lavender"
+                aria-label="薰衣草紫便利貼"
+                aria-pressed="false"
+              >
+                <span class="swatch-lavender"></span></button
+              ><button
+                type="button"
+                class="color-filter dot-filter"
+                data-color="peach"
+                aria-label="蜜桃橘便利貼"
+                aria-pressed="false"
+              >
+                <span class="swatch-peach"></span>
+              </button>
+            </div>
+          </div>
+          <p class="board-tip" id="board-tip">
+            拖曳便利貼調整順序，也可以用每張貼紙上的箭頭移動。
+          </p>
+          <div id="notes-grid" class="notes-grid" aria-label="便利貼看板"></div>
+          <div id="empty-state" class="empty-state" hidden>
+            <div class="empty-illustration" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <h3 id="empty-title">這裡等著你的第一個想法</h3>
+            <p id="empty-copy">在左側寫下內容，選個顏色，就能把它貼上看板。</p>
+          </div>
+        </section>
+      </main>
+      <footer class="site-footer">
+        <span>貼一下</span><span>想到了，就貼一下。</span>
+      </footer>
+    </div>
+
+    <dialog id="edit-dialog" class="edit-dialog" aria-labelledby="edit-title">
+      <form id="edit-form" class="edit-form">
+        <div class="dialog-heading">
+          <div>
+            <span class="small-label">修改便利貼</span>
+            <h2 id="edit-title">繼續寫下去</h2>
+          </div>
+          <button
+            id="close-dialog"
+            type="button"
+            class="close-dialog"
+            aria-label="關閉編輯視窗"
+          >
+            ×
+          </button>
+        </div>
+        <label for="edit-note-title">標題 <span>選填</span></label
+        ><input id="edit-note-title" type="text" maxlength="80" /><label
+          for="edit-note-content"
+          >內容</label
+        ><textarea
+          id="edit-note-content"
+          rows="7"
+          maxlength="2000"
+          required
+        ></textarea>
+        <fieldset class="color-fieldset">
+          <legend>便利貼顏色</legend>
+          <div
+            id="edit-color-picker"
+            class="color-picker"
+            role="radiogroup"
+            aria-label="編輯便利貼顏色"
+          >
+            <label class="color-choice"
+              ><input type="radio" name="edit-color" value="yellow" /><span
+                class="swatch swatch-yellow"
+                title="暖黃"
+              ></span
+              ><span class="sr-only">暖黃</span></label
+            ><label class="color-choice"
+              ><input type="radio" name="edit-color" value="pink" /><span
+                class="swatch swatch-pink"
+                title="粉紅"
+              ></span
+              ><span class="sr-only">粉紅</span></label
+            ><label class="color-choice"
+              ><input type="radio" name="edit-color" value="blue" /><span
+                class="swatch swatch-blue"
+                title="天空藍"
+              ></span
+              ><span class="sr-only">天空藍</span></label
+            ><label class="color-choice"
+              ><input type="radio" name="edit-color" value="green" /><span
+                class="swatch swatch-green"
+                title="薄荷綠"
+              ></span
+              ><span class="sr-only">薄荷綠</span></label
+            ><label class="color-choice"
+              ><input type="radio" name="edit-color" value="lavender" /><span
+                class="swatch swatch-lavender"
+                title="薰衣草紫"
+              ></span
+              ><span class="sr-only">薰衣草紫</span></label
+            ><label class="color-choice"
+              ><input type="radio" name="edit-color" value="peach" /><span
+                class="swatch swatch-peach"
+                title="蜜桃橘"
+              ></span
+              ><span class="sr-only">蜜桃橘</span></label
+            >
+          </div>
+        </fieldset>
+        <p id="edit-error" class="form-error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button id="cancel-dialog" type="button" class="cancel-button">
+            取消</button
+          ><button type="submit" class="save-button">儲存變更</button>
+        </div>
+      </form>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden>
+      <span id="toast-message"></span
+      ><button id="undo-delete" type="button" hidden>復原</button
+      ><button id="dismiss-toast" type="button" aria-label="關閉提示">×</button>
+    </div>
+    <p id="live-status" class="sr-only" role="status" aria-live="polite"></p>
+  </body>
+</html>
